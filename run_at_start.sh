@@ -1,7 +1,5 @@
 #!/bin/bash
-set -e                                          # Stop if anything goes wrong
 source env/bin/activate                         # Activate environment
-export PYTHONPATH=${PYTHONPATH}:${PWD}/pckg     # Make packages available
-
-
+export OLD_PYTHONPATH="$PYTHONPATH"
+export PYTHONPATH=${PWD}/pckg                   # Make packages available
 

@@ -1,5 +1,5 @@
 #!/bin/bash
-set -e                                          # Stop if anything goes wrong
+export PYTHONPATH="$OLD_PYTHONPATH"             # Restore python path
 deactivate                                      # Deactivate environment
 
 

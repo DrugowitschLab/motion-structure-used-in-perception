@@ -13,9 +13,12 @@ We will use a virtual environment with Python 3.6+:
 
 ```
 $ python3 -m pip install --user --upgrade pip   # Install pip (if not yet installed)
+$ sudo apt-get install python3-venv             # May be needed for environment creation
 $ python3 -m venv env                           # Create environment
 $ source env/bin/activate                       # Activate env
-$ pip3 install --user -r requirements.txt       # Install required packages
+$ python3 -m pip install --upgrade pip          # Make sure the local pip is up to date
+$ pip3 install wheel                            # Install wheel first
+$ pip3 install -r requirements.txt              # Install other required packages
 $ deactivate                                    # Deactivate env
 ```
 
@@ -29,7 +32,7 @@ $ deactivate                                    # Deactivate env
 
 ## Usage
 
-__Always__ start your session by running `./run_at_start.sh` and end it with `./run_at_end.sh`. These will set up the virtual environment and python path. Here are some cookbooks.
+__Always__ start your session by running `source run_at_start.sh` and end it with `source run_at_end.sh`. These will set up the virtual environment and python path. Here are some cookbooks.
 
 ### Plot figures
 
