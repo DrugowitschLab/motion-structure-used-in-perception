@@ -52,6 +52,12 @@ $ cd plot
 $ python3 plot_fig_2.py
 ```
 
+Figure 3 (saved in './fig/' as png and pdf):
+```
+$ cd plot
+$ python3 plot_fig_3.py
+```
+
 ### Collect your own data
 
 ### Analyze your own data
