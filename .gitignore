@@ -104,4 +104,4 @@ venv.bak/
 .mypy_cache/
 
 # plotted figure files
-/plot/fig/
+/plot/fig/*
