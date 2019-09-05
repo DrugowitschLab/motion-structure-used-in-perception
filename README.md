@@ -46,17 +46,14 @@ __Always__ start your session by running `source run_at_start.sh` and end it wit
 
 ### Plot figures
 
-Figure 2 (saved in './fig/' as png and pdf):
 ```
 $ cd plot
-$ python3 plot_fig_2.py
+$ python3 plot_fig_2.py   # Plot Figure 2
+$ python3 plot_fig_3.py   # Plot Figure 3
+$ python3 plot_fig_4.py   # Plot Figure 4
 ```
 
-Figure 3 (saved in './fig/' as png and pdf):
-```
-$ cd plot
-$ python3 plot_fig_3.py
-```
+All figures will be saved in './plot/fig/' as png and pdf.
 
 ### Collect your own data
 
