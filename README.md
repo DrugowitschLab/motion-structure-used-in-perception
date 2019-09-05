@@ -1,9 +1,7 @@
 # [UNDER CONSTRUCTION]
 
 # motion-structure-used-in-perception
-Python code and experiment data for Bill et al. "Hierarchical structure is employed by humans during visual motion perception" (2019).
-
-This repository allows you to:
+Python code and experiment data for Bill et al. "Hierarchical structure is employed by humans during visual motion perception" (2019). This repository allows you to:
 * Generate figures 2, 3 and 4 from the main paper,
 * Collect your own data,
 * Run the full analysis pipeline (if you are willing to dig into the code, a bit).
@@ -46,6 +44,22 @@ $ source run_at_end.sh
 All figures will be saved in './plot/fig/' as png and pdf.
 
 ### Collect your own data
+
+#### MOT experiment
+
+#### Prediction experiment
+
+```
+$ source run_at_start.sh
+$ cd pred/gui
+$ python3 play.py presets/example_trials/GLO.py -f -T 10   # EITHER: try out 10 trials (ca. 2 min)
+$ ./run_full_experiment.sh -u 12345                        # OR: run the full experiment (ca. 75 min)
+$ cd ../..
+$ source run_at_end.sh
+```
+If you run the full experiment, your data will be stored in `/data/pred/myexp/`.
+Please refer to [`/pred/gui/README.md`](./pred/gui/README.md) for further information -- especially to ensure a stable frame rate before running a full experiment.
+
 
 ### Analyze your own data
 

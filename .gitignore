@@ -105,3 +105,7 @@ venv.bak/
 
 # plotted figure files
 /plot/fig/*
+
+# self-collected data
+/pred/gui/data/pred/myexp/*
+/data/pred/myexp/*
