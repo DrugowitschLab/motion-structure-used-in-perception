@@ -3,13 +3,13 @@ Python code and experiment data for Bill et al. "Hierarchical structure is emplo
 
 
 ```
-REMARK: We assume a ubuntu-based linux installation.
-        On Mac, you should be able to use homebrew with sip and pyqt.
+REMARK: We assume a Ubuntu-based linux installation.
+        On Mac, you should be able to homebrew with sip and pyqt.
 ```
 
 ## Installation
 
-We will use a virtual environment with Python 3.6+:
+We suggest to use a virtual environment with Python 3.6+:
 
 ```
 $ python3 -m pip install --user --upgrade pip   # Install pip (if not yet installed)
@@ -20,6 +20,14 @@ $ python3 -m pip install --upgrade pip          # Make sure the local pip is up 
 $ pip3 install wheel                            # Install wheel first
 $ pip3 install -r requirements.txt              # Install other required packages
 $ deactivate                                    # Deactivate env
+```
+
+If the 'Arial' font is not installed already:
+
+```
+$ sudo apt-get install ttf-mscorefonts-installer
+$ sudo fc-cache
+$ python3 -c "import matplotlib.font_manager; matplotlib.font_manager._rebuild()"
 ```
 
 ## List of directories
@@ -35,6 +43,12 @@ $ deactivate                                    # Deactivate env
 __Always__ start your session by running `source run_at_start.sh` and end it with `source run_at_end.sh`. These will set up the virtual environment and python path. Here are some cookbooks.
 
 ### Plot figures
+
+Figure 2 (saved in './fig/' as png and pdf):
+```
+$ cd plot
+$ python3 plot_fig_2.py
+```
 
 ### Collect your own data
 
