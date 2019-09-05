@@ -47,6 +47,16 @@ All figures will be saved in './plot/fig/' as png and pdf.
 
 #### MOT experiment
 
+[Todo:
+* Generate trials in python
+* Trans-code to matlab
+* Copy to Trials directory
+* Make sure Psychtoolbox is set up
+* Run thresholding
+* Run test
+* Copy results to data]
+
+
 #### Prediction experiment
 
 ```
@@ -63,6 +73,9 @@ Please refer to [`/pred/gui/README.md`](./pred/gui/README.md) for further inform
 
 ### Analyze your own data
 
+[Todo: Analysis chain]
+
+... or use above analysis chain to recreate the data files provided in `/data` from the raw data in `/data/rmot/paper` and `/data/pred/paper`.
 
 ## List of directories
 
