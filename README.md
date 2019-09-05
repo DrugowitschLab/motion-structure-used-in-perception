@@ -1,3 +1,5 @@
+# [UNDER CONSTRUCTION]
+
 # motion-structure-used-in-perception
 Python code and experiment data for Bill et al. "Hierarchical structure is employed by humans during visual motion perception" (2019).
 
