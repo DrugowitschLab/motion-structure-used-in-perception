@@ -189,7 +189,7 @@ $ cd ..
 $ source run_at_end.sh
 ```
 
-**Remark:** The provided code implements some small improvements in the numerical fitting (in step 2.) as compared to the _biorXiv preprint v1_: because the log-likelihood landscape is non-convex, the optimizer can get stuck in local optima. The improved code uses a different method in `scipy.optimize.minimize` including gradients and yields even stronger significance in Fig. 3 as well as better model distinction in Fig. S2 than the _biorXiv preprint v1_. Improved figures will be included in future versions of the preprint.
+**Remark:** The provided code implements some small improvements in the numerical fitting (in step 2.) as compared to the _bioRxiv preprint v1_: because the log-likelihood landscape is non-convex, the optimizer can get stuck in local optima. The improved code uses a different method in `scipy.optimize.minimize` including gradients and yields even stronger significance in Fig. 3 as well as better model distinction in Fig. S2 than the _bioRxiv preprint v1_. Improved figures will be included in future versions of the preprint.
 
 ## Miscellaneous
 
