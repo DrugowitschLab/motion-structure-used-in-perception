@@ -202,10 +202,6 @@ def init_plot():
     cmap = pl.cm.Paired
     kwargs = dict(marker='o', s=cfg['display']['disc_radius']**2, c=cfg['display']['disc_color'],
                   cmap=cmap, norm=norm, linewidths=0., zorder=2)
-    #if (targets is not None) and globalVars.HIDETARGETS:
-        #rgbcolors = [cmap(c) for c in cfg['display']['disc_color']]
-        #for i in targets:
-            #rgbcolors[i] = rgbcolors[i][:3] + (0.,)
     plottedDots = ax.scatter(x, y, animated=False, **kwargs)       # Test if animated and blit should be used in non-interactive backends
     plottedDots.set_visible(False)                                  # Initially dots are invisible
     # # #  Plot the labels  # # #
@@ -219,7 +215,6 @@ def init_plot():
     plottedText = ax.text(np.pi/2, 0.25, "", weight='bold', size='14', ha="center")
     # # #  Axes range and decoration  # # #
     ax.set_rmax(cfg['display']['axes_radius'])
-    #ax.set_rticks(np.array([0.333, 0.666, 1.0, 1.333]) * radial_mean)
     ax.set_rticks(np.array([1.0,]) * radial_mean)
     ax.set_xticks([])
     if cfg['display']['show_grid']:

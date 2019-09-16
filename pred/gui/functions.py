@@ -227,7 +227,7 @@ class StructuredMotionStimulus(object):
         # # #  phi: draw stationary distribution velocities  # # #
         #Sigma = self.tau_vphi * self.L@self.L.T / 2
         if self.f_dW is None:
-            Sigma = self.tau_vphi * np.eye(self.M) / 2
+            Sigma = self.tau_vphi * np.eye(self.M) / 2   # The sims are done in whitespace: i.e., dz = L * "motion source"
             if self.DEV:
                 print(Sigma)
             vphi = self.rng.multivariate_normal(mean=np.zeros(M), cov=Sigma)
@@ -297,20 +297,10 @@ def factory_onMouseClick(globalVars):
 # Key press event
 def factory_onkeypress(globalVars):
     def onkeypress(event):
-        #print('press', event.key)
-        #import sys
-        #sys.stdout.flush()
         if event.key == 'escape':
             import pylab as pl
             print("Closing figure.")
             pl.close(globalVars.fig)
-            #import sys
-            #sys.exit(not globalVars.COMPLETED)
-        #elif event.key == 'p':
-            #globalVars.PAUSE ^= True
-        #elif event.key == 'v' or event.key == 'h':
-            #globalVars.HIDETARGETS ^= True
-            #globalVars.fade_frame_state = 0
         elif event.key in (' ', 'enter') and globalVars.phaseChanger.phase == "after":
             # Init new new trial
             globalVars.start_new_trial()
@@ -364,8 +354,6 @@ class Cursor(object):
         self.isValid = lambda r: valid_radius[0] <= r <= valid_radius[1]
         self.isVisible = False
         self.dot.set_visible(self.isVisible)
-        # text location in axes coords
-        #self.txt = ax.text(0.7, 0.9, '', transform=ax.transAxes)
 
     def mouse_move(self, event):
         if not event.inaxes:
@@ -379,7 +367,6 @@ class Cursor(object):
         alpha = 0.3 + 0.7 * self.isValid(r)
         self.dot.set_alpha(alpha)
         self.dot.set_visible(self.isVisible)
-        #self.txt.set_text('phi=%5.1f deg, r=%1.2f' % (360 * phi/2/np.pi, r))
 
     def set_visible(self, b):
         self.isVisible = b

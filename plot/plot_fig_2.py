@@ -12,7 +12,7 @@ from scipy.stats import linregress
 # D : Scatter plots
 
 ZOOM = 2.
-PLOT = ("A","B","C","D")  # ("A", "B", "C", "D", "E")
+PLOT = ("A","B","C","D")
 SAVEFIG = True
 
 fname_data = "../data/dataframe_MOT_MarchApril_2019_human_and_sim.pkl.zip"
