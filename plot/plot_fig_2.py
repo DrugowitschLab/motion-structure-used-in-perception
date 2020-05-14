@@ -9,13 +9,14 @@ from scipy.stats import linregress
 # A : Motion trees
 # B : Bar plots
 # C : Observer model
-# D : Scatter plots
+# D : Stacked bar plots
 
 ZOOM = 2.
 PLOT = ("A","B","C","D")
 SAVEFIG = True
 
 fname_data = "../data/dataframe_MOT_MarchApril_2019_human_and_sim.pkl.zip"
+
 perf_level = dict(chance=3*3/7, thresh=2.15, perfect=3.)
 
 trackers = ("Human", "TRU", "IND")
@@ -50,12 +51,12 @@ tracker_hatches = {
     "IND" : "////",
     }
 
+stacked_perf_color = { i : pl.cm.RdYlGn(i/3.) for i in range(4) }
 
 # # #  \PARAMETERS  # # #
 
 
 # # #  AUX FUNCTIONS  # # #
-
 def light_color(colname, weight=0.3):
     c4 = pl.matplotlib.colors.to_rgba_array(colname)
     w4 = pl.matplotlib.colors.to_rgba_array("white")
@@ -74,21 +75,20 @@ def auto_yscale(ax=None, data=None, tol=0.15):
     ax.set_ylim(ymin - d, ymax + d)
     pl.draw()
 
-def print_panel_label(letter, ax, dx=-0.03, dy=0.005, abs_x=None):
-    x,y = ax.bbox.transformed(fig.transFigure.inverted()).corners()[1]  # Top left in fig coords
+def print_panel_label(letter, ax, dx=-0.03, dy=0.005, abs_x=None, transform=None):
+    if not transform:
+        transform = fig.transFigure
+    x,y = ax.bbox.transformed(transform.inverted()).corners()[1]  # Top left in fig coords
     if abs_x is not None:
         x = abs_x
         dx = 0.
-    t = ax.text(x+dx, y+dy, letter, transform=fig.transFigure, **panellabel_fontkwargs)
+    t = ax.text(x+dx, y+dy, letter, transform=transform, **panellabel_fontkwargs)
     return t
-
 
 # # #  \AUX FUNCTIONS  # # #
 
 
 # # #  MAIN   # # #
-
-
 pl.matplotlib.rc("figure", dpi=ZOOM*pl.matplotlib.rcParams['figure.dpi'])
 
 import pandas
@@ -134,22 +134,20 @@ for i in range(nPanel):
     ax = fig.add_axes(rect, aspect="auto", xticks=[], yticks=[])
     axes["obsmodel_%d" % i] = ax
 
-# scatter
-hi = 0.22
-wi = hi/ar
-nPanel = 2
-for i,s in enumerate(("TRU", "IND")):
-    li = 0.06 + i * (ri - 0.06)/nPanel + ((ri - 0.06)/nPanel - wi)/2
-    rect = li, 0.05, wi, hi
-    ax = fig.add_axes(rect, aspect="equal", xticks=[], yticks=[])
-    axes["scatter_%s" % s] = ax
+# stacked
+wtot = ri-0.12
+wi = wtot / ( len(conditions) * (1 + 0.15) - 0.15 )
+for i,c in enumerate(conditions):
+    rect = 0.12 + i * wi * 1.15, 0.075, wi, 0.15
+    ax = fig.add_axes(rect, aspect="auto")
+    axes["stacked_%s" % c] = ax
 
 
 # # #  Set panel labels
 print_panel_label(letter="A", ax=axes["tree_IND"], abs_x=0.025, dy=0.)
 print_panel_label(letter="B", ax=axes["bars"], abs_x=0.025)
 print_panel_label(letter="C", ax=axes["obsmodel_0"], abs_x=0.025)
-print_panel_label(letter="D", ax=axes["scatter_TRU"], abs_x=0.025)
+print_panel_label(letter="D", ax=axes["stacked_independent_test"], abs_x=0.025, dy=0.035)
 
 
 # # #  PLOT TREES  # # #
@@ -220,7 +218,6 @@ if "B" in PLOT:
         kwargs = dict(s=1., c=c, marker='.', zorder=2)
         if trac in visible_trackers:
             ax.scatter(x, y, **kwargs)
-
     # # #  Beautify
     xmin, xmax = -0.5, nTracker-0.5
     ax.set_xlim(xmin, xmax)
@@ -246,6 +243,7 @@ if "B" in PLOT:
     ax.add_patch(patch)
     t = ax.text(1.8, 3-0.2, "Bayesian observer\nmodel predictions", fontsize=6, va="center", ha="center", color="0.15")
 
+
 if "C" in PLOT:
     for i,s in enumerate(("graph", "assignment", "confusion")):
         ax = axes["obsmodel_%d" % i]
@@ -255,72 +253,51 @@ if "C" in PLOT:
         ax.set_xticks([])
         ax.set_yticks([])
 
-# # #  SCATTER
+
+# # #  STACKED
 if "D" in PLOT:
-    idx = (df["tracker"] == 'Human')
-    ph = np.array(df["numCorrect"].loc[idx]).reshape(-1,nTrials).mean(1)
-    # TRU PERF
-    idx = (df["tracker"] == 'TRU')
-    pt = np.array(df["numCorrect"].loc[idx]).reshape(-1,nTrials*nReps).mean(1)
-    # IND PERF
-    idx = (df["tracker"] == 'IND')
-    pi = np.array(df["numCorrect"].loc[idx]).reshape(-1,nTrials*nReps).mean(1)
-    rest = linregress(pt, ph)
-    resi = linregress(pi, ph)
-    rhot = np.corrcoef(pt, ph)[0,1]
-    rhoi = np.corrcoef(pi, ph)[0,1]
+    nT = nTrials * len(subjects)
+    for cn,cond in enumerate(conditions):
+        # count
+        F = np.zeros((len(trackers),4))
+        for trn, tr in enumerate(trackers):
+            count = np.bincount(df.loc[(df.condition==cond) & (df.tracker==tr)].numCorrect).astype(float)
+            assert count.sum() == nT * (1 if tr=="Human" else nReps)
+            count /= nT * (1 if tr=="Human" else nReps)
+            F[trn] = count
+        # plot
+        ax = axes["stacked_%s" % cond]
+        bottom = np.zeros(len(trackers))
+        for ncorr in range(4):
+            y = F[:,ncorr]
+            kwargs = dict(width=0.8, color=stacked_perf_color[ncorr])
+            ax.bar(np.arange(len(trackers)), y, bottom=bottom, **kwargs)
+            bottom += y
+        ax.set_title(condition_labels[cond], color=perfcolors[cond], pad=6.)
+        ax.set_xticks(np.arange(len(trackers)))
+        labels = [ dict(Human="Human", TRU="%s pr." % condition_labels[cond][:3], IND="IND pr.")[tr] for tr in trackers]
+        ax.set_xticklabels(labels, rotation=50, ha="right")
+        ax.xaxis.set_tick_params(pad=0.)
+        # beautify
+        ax.set_ylim(0,1)
+        if cn==0:
+            ax.set_yticks([0,1])
+            ax.set_ylabel("Fraction of\n 0,1,2,3 corr.", labelpad=3)
+            for s in ("right", "top"):
+                ax.spines[s].set_visible(False)
+        else:
+            ax.set_yticks([])
+            for s in ("left", "right", "top"):
+                ax.spines[s].set_visible(False)
 
-    axt = axes["scatter_TRU"]
-    axi = axes["scatter_IND"]
-    for cond in conditions:
-        col = perfcolors[cond]
-        # HUMAN PERF
-        idx = (df["tracker"] == 'Human') & (df["condition"] == cond)
-        ph = np.array(df["numCorrect"].loc[idx]).reshape(-1,nTrials).mean(1)
-        # TRU PERF
-        idx = (df["tracker"] == 'TRU') & (df["condition"] == cond)
-        pt = np.array(df["numCorrect"].loc[idx]).reshape(-1,nTrials*nReps).mean(1)
-        # IND PERF
-        idx = (df["tracker"] == 'IND') & (df["condition"] == cond)
-        pi = np.array(df["numCorrect"].loc[idx]).reshape(-1,nTrials*nReps).mean(1)
-        kwargs = dict(s=1., c=col, marker='.', zorder=2)
-        axt.scatter(pt, ph, **kwargs)
-        axt.set_xlabel("Correct prior", labelpad=-3)
-        axt.set_ylabel("Human", labelpad=-7)
-        axi.scatter(pi, ph, **kwargs)
-        axi.set_xlabel("IND prior", labelpad=-3)
-        axi.set_ylabel("Human", labelpad=-7)
-
-    xmin = min([ ax.xaxis.get_data_interval()[0] for ax in (axt, axi) ])
-    xmax = max([ ax.xaxis.get_data_interval()[1] for ax in (axt, axi) ])
-    ymin = min([ ax.yaxis.get_data_interval()[0] for ax in (axt, axi) ])
-    ymax = max([ ax.yaxis.get_data_interval()[1] for ax in (axt, axi) ])
-
-    amin = min(xmin, ymin, pc)
-    amax = max(xmax, ymax, pp)
-
-    for ax, res, pm, rho in zip( (axt,axi), (rest, resi), (pt, pi), (rhot, rhoi) ):
-        d = 0.05
-        ax.plot([amin-d, amax+d], [amin-d,amax+d], ":", c="0.5", lw=0.5, zorder=0) # ':', color='0.5')
-        kwargs = dict(ls="--", lw=0.5, color='k', zorder=5)
-        x = np.array([amin, amax])
-        ax.plot(x, (lambda x: res.slope * x + res.intercept)(x), **kwargs)
-        ax.set_xlim(amin-d, amax+d)
-        ax.set_ylim(amin-d, amax+d)
-        ax.set_xticks([pc, pp])
-        ax.set_xticklabels([f"{pc:.2f}", f"{pp:.2f}"])
-        ax.set_yticks([pc, pp])
-        ax.set_yticklabels([f"{pc:.2f}", f"{pp:.2f}"])
-        ax.text(0.98, 0.12, r"$\rho$="+ f"{rho:.2f}", ha='right', va='bottom', fontsize=6, transform = ax.transAxes)
-        ax.text(0.98, 0.02, f"p={res.pvalue:.2}", ha='right', va='bottom', fontsize=6, transform = ax.transAxes)
 
 # # #  SAVE  # # #
 
 if SAVEFIG:
-    fname = "./fig/Fig2.png"
+    fname = "./fig/Figure_2.png"
     print("> Save figure to file: %s" % fname)
     fig.savefig(fname)
-    fname = "./fig/Fig2.pdf"
+    fname = "./fig/Figure_2.pdf"
     print("> Save figure to file: %s" % fname)
     fig.savefig(fname)
 else:

@@ -30,7 +30,7 @@ In the cloned repository, we suggest to use a virtual environment with Python 3.
 ```
 $ python3 -m pip install --user --upgrade pip   # Install pip (if not yet installed)
 $ sudo apt-get install python3-venv             # May be needed for environment creation
-$ python3 -m venv env                           # Create environment
+$ python3.6 -m venv env                         # Create environment with the right python interpreter (must be installed)
 $ source env/bin/activate                       # Activate env
 $ python3 -m pip install --upgrade pip          # Make sure the local pip is up to date
 $ pip3 install wheel                            # Install wheel first

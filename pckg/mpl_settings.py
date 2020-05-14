@@ -1,6 +1,6 @@
 import matplotlib as mpl
 
-name = "Matplotlib settings for 'Bill et al. (2019)'"
+name = "Matplotlib settings for 'Bill et al., Hierarchical motion structure'"
 
 cm2inch = lambda x: 0.393700787 * x
 
