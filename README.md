@@ -1,13 +1,13 @@
 # motion-structure-used-in-perception
 Python code and download links to the data of
-[Bill et al., "Hierarchical structure is employed by humans during visual motion perception" (2019)](https://www.biorxiv.org/content/10.1101/758573v1).
+[Bill et al., "Hierarchical structure is employed by humans during visual motion perception" (preprint)](https://www.biorxiv.org/content/10.1101/758573v1).
 
 This repository allows you to:
-* Generate figures 2, 3 and 4 from the main paper,
+* Generate figures 2, 3, 4 and 5 from the main paper,
 * Collect your own data,
 * Run the full analysis pipeline (if you are willing to dig into the code, a bit).
 
-In case of questions, please contact [Johannes Bill](mailto:johannes_bill@hms.harvard.edu).
+In case of questions, please contact Johannes Bill (johannes_bill@hms.harvard.edu).
 
 
 ## Table of contents
@@ -52,6 +52,7 @@ $ cd plot
 $ python3 plot_fig_2.py   # Plot Figure 2
 $ python3 plot_fig_3.py   # Plot Figure 3
 $ python3 plot_fig_4.py   # Plot Figure 4
+$ python3 plot_fig_5.py   # Plot Figure 5
 $ cd ..
 $ source run_at_end.sh
 ```
@@ -118,6 +119,8 @@ The data from the publication can be downloaded here:
 For below analyses, unzip the content of these archives into the directories `data/rmot/paper` and `data/pred/paper` respectively. Then, execute steps 1. and 3. (replacing `myexp` with `paper`) in the description of _Collect your own data_ >> _MOT experiment_.
 
 ### Data analysis
+
+**Remark:** _The following description for the data analysis still refers to the [1st version of the manuscript](https://www.biorxiv.org/content/10.1101/758573v1). The data and analyses are generally identical with the 2nd version, but do not yet include the Bayesian model comparison across motion structures and the alternative observer models in the MOT task, presented in Figure 3. An updated description will be provided soon._
 
 Use the following analysis chain to recreate the aggregate data files provided in `/data` from the raw data in `/data/rmot/paper` and `/data/pred/paper` -- or to analyze your own data (see above). The analysis may require some understanding of the Python code. So, please, do not expect a direct copy-and-paste workflow.
 
@@ -188,8 +191,6 @@ $ cd pred/ana
 $ cd ..
 $ source run_at_end.sh
 ```
-
-**Remark:** The provided code implements some small improvements in the numerical fitting (in step 2.) as compared to the _bioRxiv preprint v1_: because the log-likelihood landscape is non-convex, the optimizer can get stuck in local optima. The improved code uses a different method in `scipy.optimize.minimize` including gradients and yields even stronger significance in Fig. 3 as well as better model distinction in Fig. S2 than the _bioRxiv preprint v1_. Improved figures will be included in future versions of the preprint.
 
 ## Miscellaneous
 
